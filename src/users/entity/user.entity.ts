@@ -1,5 +1,6 @@
-import { PrimaryKey, Property, Unique } from '@mikro-orm/core';
+import { Entity, PrimaryKey, Property, Unique } from '@mikro-orm/core';
 
+@Entity()
 export class User {
   @PrimaryKey({ name: 'id', columnType: 'uuid' })
   id!: string;

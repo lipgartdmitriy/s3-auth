@@ -1,4 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class HashingService {}
+export abstract class HashingService {
+  abstract hash(value: string): Promise<string>;
+  abstract compare(value: string, hash: string): Promise<boolean>;
+}
