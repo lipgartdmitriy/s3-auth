@@ -1,17 +1,20 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { UsersModule } from './users/users.module';
 import { StorageModule } from './storage/storage.module';
 import { AuthModule } from './auth/auth.module';
-import config from './config/mikro-orm.config';
+import { ConfigModule } from '@nestjs/config';
+import { PostgresModule } from './postgres/postgres.module';
 
 @Module({
   imports: [
-    MikroOrmModule.forRoot(config),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    PostgresModule.forRoot(),
     UsersModule,
-    StorageModule,
+    // StorageModule,
     AuthModule,
   ],
   controllers: [AppController],
