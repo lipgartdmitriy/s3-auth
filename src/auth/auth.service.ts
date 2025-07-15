@@ -1,10 +1,20 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  ConflictException,
+} from '@nestjs/common';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { User } from '../users/entity/user.entity';
 import { HashingService } from './hashing/hashing.service';
-import { EntityManager, EntityRepository } from '@mikro-orm/core';
+import {
+  EntityManager,
+  EntityRepository,
+  UniqueConstraintViolationException,
+} from '@mikro-orm/core';
 import { SignUpDto } from './dto/sign-up.dto';
 import { SignInDto } from './dto/sign-in.dto';
+import { TokenService } from './token.service';
+import { TokensDto } from './dto/tokens.dto';
 
 @Injectable()
 export class AuthService {
@@ -13,19 +23,27 @@ export class AuthService {
     private readonly userRepository: EntityRepository<User>,
     private readonly hashingService: HashingService,
     private readonly em: EntityManager,
+    private readonly tokenService: TokenService,
   ) {}
 
-  async signUp({ email, password }: SignUpDto): Promise<User> {
+  async signUp({ email, password }: SignUpDto): Promise<void> {
     const hashedPassword = await this.hashingService.hash(password);
     const user = this.userRepository.create({
+      id: crypto.randomUUID(),
       email,
       password: hashedPassword,
     });
-    await this.em.persistAndFlush(user);
-    return user;
+    try {
+      await this.em.persistAndFlush(user);
+    } catch (error) {
+      if (error instanceof UniqueConstraintViolationException) {
+        throw new ConflictException('Email already exists');
+      }
+      throw error;
+    }
   }
 
-  async signIn({ email, password }: SignInDto): Promise<User> {
+  async signIn({ email, password }: SignInDto): Promise<TokensDto> {
     const user = await this.userRepository.findOne({ email });
     if (!user) {
       throw new UnauthorizedException('User not found');
@@ -37,6 +55,7 @@ export class AuthService {
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid password');
     }
-    return user;
+    const accessToken = this.tokenService.issueFor(user);
+    return { accessToken };
   }
 }
