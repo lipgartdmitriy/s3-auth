@@ -1,7 +1,7 @@
 import { Entity, PrimaryKey, Property, ManyToOne } from '@mikro-orm/core';
 import { User } from '../../users/entity/user.entity';
 
-@Entity()
+@Entity({ tableName: 'files' })
 export class FileEntity {
   @PrimaryKey()
   id: string;
