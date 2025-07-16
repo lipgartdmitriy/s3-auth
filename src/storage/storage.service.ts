@@ -26,7 +26,7 @@ export class StorageService {
     fileEntity.key = key;
     fileEntity.bucketName = bucketName;
     fileEntity.url = url;
-    fileEntity.user = user;
+    fileEntity.userId = user.id;
 
     await this.em.persistAndFlush(fileEntity);
 
@@ -39,13 +39,13 @@ export class StorageService {
   }
 
   async findAll(user: User) {
-    return this.em.find(FileEntity, { user: user });
+    return this.em.find(FileEntity, { userId: user.id });
   }
 
   async remove(id: string, user: User) {
     const file = await this.em.findOne(FileEntity, {
       id,
-      user,
+      userId: user.id,
     });
 
     if (!file) {
