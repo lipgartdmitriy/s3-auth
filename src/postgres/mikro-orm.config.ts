@@ -5,7 +5,7 @@ import 'dotenv/config';
 import { User } from '../users/entity/user.entity';
 import { Migrator } from '@mikro-orm/migrations';
 import { Migrations } from './migration';
-import { FileEntity } from '../storage/entities/file.entity';
+import { FileEntity } from '../storage/entity/file.entity';
 
 const logger: Logger = new Logger('Postgres');
 

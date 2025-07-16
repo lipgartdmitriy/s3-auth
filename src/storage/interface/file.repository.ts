@@ -1,4 +1,4 @@
-import { FileEntity } from '../entities/file.entity';
+import { FileEntity } from '../entity/file.entity';
 
 export abstract class FileRepository {
   abstract create(file: FileEntity): Promise<FileEntity>;

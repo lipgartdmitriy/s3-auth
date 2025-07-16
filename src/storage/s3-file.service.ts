@@ -5,7 +5,7 @@ import {
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
-import { FileEntity } from './entities/file.entity';
+import { FileEntity } from './entity/file.entity';
 import s3Config from './config/s3.config';
 import { ConfigType } from '@nestjs/config';
 import { EntityManager } from '@mikro-orm/core';

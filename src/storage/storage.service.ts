@@ -1,11 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import s3Config from './config/s3.config';
-import { FileEntity } from './entities/file.entity';
+import { FileEntity } from './entity/file.entity';
 import { User } from '../users/entity/user.entity';
 import { FileService } from './interface/file.service';
 import { FileRepository } from './interface/file.repository';
-import { FileMapper } from './mappers/file.mapper';
+import { FileMapper } from './mapper/file.mapper';
 import { FileDto } from './dto/file.dto';
 
 @Injectable()

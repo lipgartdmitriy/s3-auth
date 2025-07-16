@@ -11,10 +11,10 @@ import {
 } from '@nestjs/common';
 import { StorageService } from './storage.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { JwtAuthGuard } from '../auth/guards/access-token/access-token.guard';
+import { JwtAuthGuard } from '../auth/guard/access-token/access-token.guard';
 import { CurrentUser } from '../auth/decorator/current-user.decorator';
 import { User } from '../users/entity/user.entity';
-import { DefaultFileValidationPipe } from './pipes/file-validation.pipe';
+import { DefaultFileValidationPipe } from './pipe/file-validation.pipe';
 import { FileDto } from './dto/file.dto';
 
 @Controller('files')

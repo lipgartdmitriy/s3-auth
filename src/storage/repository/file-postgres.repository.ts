@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { EntityManager } from '@mikro-orm/core';
-import { FileEntity } from '../entities/file.entity';
+import { FileEntity } from '../entity/file.entity';
 import { FileRepository } from '../interface/file.repository';
 
 @Injectable()

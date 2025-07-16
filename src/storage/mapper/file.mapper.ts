@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { FileEntity } from '../entities/file.entity';
+import { FileEntity } from '../entity/file.entity';
 import { FileDto } from '../dto/file.dto';
 
 @Injectable()

@@ -1,4 +1,4 @@
-import { FileEntity } from '../entities/file.entity';
+import { FileEntity } from '../entity/file.entity';
 import { FileUploadDto } from '../dto/file-upload.dto';
 
 export abstract class FileService {
