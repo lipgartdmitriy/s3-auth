@@ -7,6 +7,9 @@ It is a simple demo file management application that enables users to upload, ma
 - User authentication
 - File uploads to Amazon S3
 - Per-user file management
+- Database updates using migrations
+- Custom decorators
+- Validation pipes
 
 ### Tech Stack
 
