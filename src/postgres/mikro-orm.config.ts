@@ -5,12 +5,13 @@ import 'dotenv/config';
 import { User } from '../users/entity/user.entity';
 import { Migrator } from '@mikro-orm/migrations';
 import { Migrations } from './migration';
+import { FileEntity } from '../storage/entities/file.entity';
 
 const logger: Logger = new Logger('Postgres');
 
 export const config = defineConfig({
   logger: (message: string) => logger.debug(message),
-  entities: [User],
+  entities: [User, FileEntity],
   dbName: process.env['DB_NAME'],
   host: process.env['DB_HOST'],
   debug: true,

@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { PostgresModule } from './postgres/postgres.module';
 import jwtConfig from './auth/config/jwt.config';
+import { StorageModule } from './storage/storage.module';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import jwtConfig from './auth/config/jwt.config';
     }),
     PostgresModule.forRoot(),
     UsersModule,
-    // StorageModule,
+    StorageModule,
     AuthModule,
   ],
   controllers: [AppController],

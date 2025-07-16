@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { User } from '../users/entity/user.entity';
-import { HashingService } from './hashing/hashing.service';
+import { HashingService } from './hashing/interface/hashing.service';
 import {
   EntityManager,
   EntityRepository,
