@@ -9,6 +9,9 @@ import { S3FileService } from './s3-file.service';
 import { FileService } from './interface/file.service';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { FileRepository } from './interface/file.repository';
+import { PostgresFileRepository } from './repository/file-postgres.repository';
+import { FileMapper } from './mappers/file.mapper';
 
 @Module({
   imports: [
@@ -21,7 +24,9 @@ import { APP_GUARD } from '@nestjs/core';
   controllers: [StorageController],
   providers: [
     StorageService,
+    FileMapper,
     { provide: FileService, useClass: S3FileService },
+    { provide: FileRepository, useClass: PostgresFileRepository },
     { provide: APP_GUARD, useClass: ThrottlerGuard },
   ],
   exports: [StorageService],

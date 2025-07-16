@@ -1,22 +1,26 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
-import { EntityManager } from '@mikro-orm/core';
 import s3Config from './config/s3.config';
 import { FileEntity } from './entities/file.entity';
 import { User } from '../users/entity/user.entity';
 import { FileService } from './interface/file.service';
+import { FileRepository } from './interface/file.repository';
+import { FileMapper } from './mappers/file.mapper';
+import { FileDto } from './dto/file.dto';
 
 @Injectable()
 export class StorageService {
   constructor(
     @Inject(s3Config.KEY)
     private readonly awsConfig: ConfigType<typeof s3Config>,
-    private readonly em: EntityManager,
     private readonly fileService: FileService,
+    private readonly fileRepository: FileRepository,
+    private readonly fileMapper: FileMapper,
   ) {}
 
-  async uploadFile(file: Express.Multer.File, user: User) {
+  async uploadFile(file: Express.Multer.File, user: User): Promise<FileDto> {
     const { url, key } = await this.fileService.uploadFile(file, user.id);
+
     const bucketName = this.awsConfig.bucketName;
     const fileEntity = new FileEntity();
     fileEntity.id = crypto.randomUUID();
@@ -28,25 +32,18 @@ export class StorageService {
     fileEntity.url = url;
     fileEntity.userId = user.id;
 
-    await this.em.persistAndFlush(fileEntity);
+    await this.fileRepository.create(fileEntity);
 
-    return {
-      url: fileEntity.url,
-      key: fileEntity.key,
-      originalName: fileEntity.originalName,
-      id: fileEntity.id,
-    };
+    return this.fileMapper.toDto(fileEntity);
   }
 
-  async findAll(user: User) {
-    return this.em.find(FileEntity, { userId: user.id });
+  async findAll(user: User): Promise<FileDto[]> {
+    const files = await this.fileRepository.findByUserId(user.id);
+    return this.fileMapper.toDtoList(files);
   }
 
-  async remove(id: string, user: User) {
-    const file = await this.em.findOne(FileEntity, {
-      id,
-      userId: user.id,
-    });
+  async remove(id: string) {
+    const file = await this.fileRepository.findOneById(id);
 
     if (!file) {
       throw new Error(
@@ -54,7 +51,7 @@ export class StorageService {
       );
     }
     await this.fileService.deleteFile(file);
-    await this.em.removeAndFlush(file);
+    await this.fileRepository.remove(file);
 
     return { success: true };
   }
