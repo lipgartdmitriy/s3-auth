@@ -3,33 +3,42 @@ import { User } from '../../users/entity/user.entity';
 
 @Entity({ tableName: 'files' })
 export class FileEntity {
-  @PrimaryKey()
-  id: string;
+  @PrimaryKey({ name: 'id', columnType: 'uuid' })
+  id!: string;
 
-  @Property()
-  originalName: string;
+  @Property({ name: 'original_name', columnType: 'varchar(255)' })
+  originalName!: string;
 
-  @Property()
-  mimeType: string;
+  @Property({ name: 'mime_type', columnType: 'varchar(255)' })
+  mimeType!: string;
 
-  @Property()
-  size: number;
+  @Property({ name: 'size', columnType: 'decimal(10,2)' })
+  size!: number;
 
-  @Property()
-  url: string;
+  @Property({ name: 'url', columnType: 'varchar(255)' })
+  url!: string;
 
-  @Property()
-  key: string;
+  @Property({ name: 'key', columnType: 'varchar(255)' })
+  key!: string;
 
-  @Property()
-  bucketName: string;
+  @Property({ name: 'bucket_name', columnType: 'varchar(255)' })
+  bucketName!: string;
 
-  @ManyToOne(() => User)
-  user: User;
+  @ManyToOne({
+    entity: () => User,
+    name: 'user_id',
+    nullable: true,
+    mapToPk: true,
+  })
+  userId!: string;
 
-  @Property({ defaultRaw: 'CURRENT_TIMESTAMP' })
+  @Property({ name: 'created_at', columnType: 'timestamptz' })
   createdAt: Date = new Date();
 
-  @Property({ defaultRaw: 'CURRENT_TIMESTAMP', onUpdate: () => new Date() })
+  @Property({
+    name: 'updated_at',
+    columnType: 'timestamptz',
+    onUpdate: () => new Date(),
+  })
   updatedAt: Date = new Date();
 }
